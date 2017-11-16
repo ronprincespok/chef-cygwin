@@ -32,13 +32,13 @@ execute 'Stop sshd' do
     command 'cygrunsrv -E sshd'
     only_if 'cygrunsrv -Q sshd'
 end
-
-execute 'Configure sshd service' do
-    cwd 'C:\cygwin\bin'
-    environment ({'PATH' => '$PATH:.:/cygdrive/c/cygwin/bin'})
-    command "bash /usr/bin/ssh-host-config --yes --cygwin \"ntsec\" --user #{node['cygwin']['ssh']['sshd_user']} --pwd \"#{node['cygwin']['ssh']['sshd_passwd']}\" "
-    not_if('cygrunsrv -Q sshd').include? 'Running' 
-end
+#not able to execute the config sshd service
+# execute 'Configure sshd service' do
+#     cwd 'C:\cygwin\bin'
+#     environment ({'PATH' => '$PATH:.:/cygdrive/c/cygwin/bin'})
+#     command "bash /usr/bin/ssh-host-config --yes --cygwin \"ntsec\" --user #{node['cygwin']['ssh']['sshd_user']} --pwd \"#{node['cygwin']['ssh']['sshd_passwd']}\" "
+#     not_if('cygrunsrv -Q sshd').include? 'Running' 
+# end
 
 execute 'Make sure the password does not expire' do
     command  "net user #{node['cygwin']['ssh']['sshd_user']} /expires:never /active:yes"
